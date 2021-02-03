@@ -9,7 +9,7 @@ const getRandomInt = (min, max) => {
 
 const getRandomFloat = (min, max, digit = 2) => {
   if (max > min && min >= 0) {
-    return (Math.random() * (max - min + min) + min).toFixed(digit);
+    return (Math.random() * (max - min) + min).toFixed(digit);
   }
   if (max <= min) {
     throw new Error('Input data error');
