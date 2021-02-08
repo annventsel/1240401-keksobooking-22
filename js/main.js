@@ -19,9 +19,6 @@ const getRandomFloat = (min, max, digit = 2) => {
   }
 }
 
-// getRandomInt;
-// getRandomFloat;
-
 const objectsCount = 10;
 
 let objects = [];
@@ -55,11 +52,11 @@ const minGuests = 0;
 const maxGuests = 3;
 
 const getRandomString = (string) => {
-  return string[getRandomInt(0, string.lenght - 1)];
+  return string[getRandomInt(0, string.length - 1)];
 };
 
 const shuffleArray = (a) => {
-  for (let i = a.lenght - 1; i > 0; i--) {
+  for (let i = a.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [a[i], a[j]] = [a[j], a[i]];
   }
@@ -81,7 +78,7 @@ const addObjects = () => {
         guests: getRandomInt(minGuests, maxGuests),
         checkin: getRandomString(checkTime),
         checkout: getRandomString(checkTime),
-        features: shuffleArray(features).slice(0, getRandomInt(1, features.lenght)),
+        features: shuffleArray(features).slice(0, getRandomInt(1, features.length)),
         description: 'Set in Tokyo, within 400 metres of Sony Music Roppongi Museum and 500 metres of Asahi Shrine, Mitsui Garden',
         photos: getRandomString(photos),
       },
@@ -95,5 +92,3 @@ const addObjects = () => {
 };
 
 addObjects();
-
-// const TITLES = ['Квартира в центре', 'Квартира на окраине', 'Аппартаменты с бассейном', 'Квартира без удобств, вид во двор', 'Хостел', 'Стандартный дабл', 'Комната с подселением', 'Двухуровневый пентхауз'];
