@@ -56,12 +56,15 @@ const maxGuests = 3;
 
 const getRandomString = (string) => {
   return string[getRandomInt(0, string.lenght - 1)];
-}
+};
 
-const getRandomFeatures = (features) => {
-  features.lenght = getRandomInt(1, features.lenght);
-  return features;
-}
+const shuffleArray = (a) => {
+  for (let i = a.lenght - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+};
 
 const addObjects = () => {
   for (let i = 0; i < objectsCount; i++) {
@@ -78,7 +81,7 @@ const addObjects = () => {
         guests: getRandomInt(minGuests, maxGuests),
         checkin: getRandomString(checkTime),
         checkout: getRandomString(checkTime),
-        features: getRandomFeatures(features),
+        features: shuffleArray(features).slice(0, getRandomInt(1, features.lenght)),
         description: 'Set in Tokyo, within 400 metres of Sony Music Roppongi Museum and 500 metres of Asahi Shrine, Mitsui Garden',
         photos: getRandomString(photos),
       },
@@ -88,6 +91,7 @@ const addObjects = () => {
       },
     })
   }
+  return objects;
 };
 
 addObjects();
