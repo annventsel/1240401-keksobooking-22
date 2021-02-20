@@ -90,7 +90,7 @@ const createObject = () => {
     //создание объекта offer
   let offer = {
     title: title[counter],
-    adress: location.x + ', ' + location.y,
+    address: location.x + ', ' + location.y,
     price: getRandomInt(minPrice, maxPrice),
     type: getRandomString(type),
     rooms: getRandomInt(minRooms, maxRooms),

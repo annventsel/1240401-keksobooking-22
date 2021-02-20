@@ -1,4 +1,4 @@
-import {newObject, convertType, wordsDecl, room, guest} from './data.js';
+import {newObject, convertType, wordsDecl} from './data.js';
 import {declination} from './util.js';
 // поиск места для вставки карточки объявления
 const cardPlace = document.querySelector('#map-canvas');
@@ -8,7 +8,7 @@ const templItem = document.querySelector('#card').content.querySelector('.popup'
 // функция наполнения объявления рандомными фичами
 
 const getFeatures = (container, features) => {
-  let list = container.querySelector('li');
+  let list = templItem.querySelectorAll('li');
   list.forEach((item) => {
     if (features.indexOf(item.classList[1].replace('popup__feature--', '')) === -1) {
       item.remove();
@@ -55,11 +55,11 @@ const createCard = (dataObject) => {
   const cardItem = templItem.cloneNode(true);
 
   cardItem.querySelector('.popup__title').textContent = dataObject.offer.title;
-  cardItem.querySelector('popup__text--adress').textContent = dataObject.offer.address;
+  cardItem.querySelector('.popup__text--address').textContent = dataObject.offer.address;
   cardItem.querySelector('.popup__text--price').innerHTML = dataObject.offer.price + ' <span>₽/ночь</span>';
   cardItem.querySelector('.popup__type').textContent = convertType[dataObject.offer.type];
   cardItem.querySelector('.popup__description').textContent = dataObject.offer.description;
-  cardItem.querySelector('popup__text--capacity').textContent = `${dataObject.offer.rooms} ${declination(room, wordsDecl.room)} для ${dataObject.offer.guests} ${declination(guest, wordsDecl.guest)}`;
+  cardItem.querySelector('.popup__text--capacity').textContent = `${dataObject.offer.rooms} ${declination(wordsDecl.room, wordsDecl.room)} для ${dataObject.offer.guests} ${declination(wordsDecl.guest, wordsDecl.guest)}`;
   cardItem.querySelector('.popup__text--time').textContent = `Заезд после ${dataObject.offer.checkin}, выезд до ${dataObject.offer.checkout}`;
   cardItem.querySelector('.popup__avatar').src = dataObject.offer.avatar;
   cardItem.querySelector('.popup__features').innerHTML = getFeatures(container, dataObject.offer.features) ;
