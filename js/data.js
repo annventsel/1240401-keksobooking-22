@@ -7,13 +7,6 @@ const type = [
   'bungalow',
 ];
 
-export const convertType = {
-  palace: 'Дворец',
-  flat: 'Квартира',
-  house: 'Дом',
-  bungalow: 'Бунгало',
-};
-
 export const title = [
   'Стандарт двухместный',
   'Стандарт одноместный',
@@ -29,7 +22,7 @@ export const title = [
 
 export const wordsDecl = {
   room: ['комната', 'комнаты', 'комнат'],
-  guest: ['гость', 'гостя', 'гостей'],
+  guest: ['гостя', 'гостей', 'гостей'],
 };
 
 const checkTime = [
@@ -48,6 +41,9 @@ const features = [
 ];
 
 const photos = [
+  'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
+  'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
+  'http://o0.github.io/assets/images/tokyo/hotel3.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg',
