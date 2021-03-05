@@ -1,14 +1,8 @@
-import './data.js';
+import newAdv from './data.js';
 import './util.js';
-import { createAdv } from './util.js';
 import { createCard  } from './card.js';
+import './form.js'
 
 const mapCanvas = document.querySelector('.map__canvas');
 
-let newAdv = createAdv();
-
-let cardAdv = createCard(newAdv[0]);
-
-mapCanvas.appendChild(cardAdv);
-
- 
+mapCanvas.appendChild(createCard(newAdv[0]));

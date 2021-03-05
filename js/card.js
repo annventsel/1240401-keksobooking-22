@@ -1,4 +1,4 @@
-import {declination, createClass} from './util.js'
+import {declination} from './util.js'
 import {wordsDecl} from './data.js'
 
 const convertType = {
@@ -16,6 +16,20 @@ const getPhotos = (arr, photo) => {
     newPhotoItem.src = item;
     photoFragment.appendChild(newPhotoItem);
   });
+
+  return photoFragment;
+};
+
+const addFeatures = (data, container) => {
+  let features = container.querySelectorAll('li');
+
+  if (features) {
+    features.forEach((item) => {
+      if (data.indexOf(item.classList[1].replace('popup__feature--', '')) === -1) {
+        item.remove();
+      }
+    });
+  }
 };
 
 export const createCard = (advert) => {
@@ -49,9 +63,11 @@ export const createCard = (advert) => {
   cardItem.querySelector('.popup__description').textContent = description;
 
   const getFeatures = cardItem.querySelector('.popup__features');
-  getFeatures.innerHTML = '';
-  const newFeaturesList = createClass(features, 'popup__feature');
-  getFeatures.appendChild(newFeaturesList);
+  if (features) {
+    addFeatures(features, getFeatures);
+  } else {
+    getFeatures.remove();
+  }
 
   const newPhoto = cardItem.querySelector('.popup__photo');
   const newPhotoList = cardItem.querySelector('.popup__photos');

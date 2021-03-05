@@ -31,25 +31,3 @@ export const shuffleArray = (a) => {
 export const declination = (number, txt, cases = [2, 0, 1, 1, 1, 2]) => {
   return txt[(number % 100 > 4 && number % 100 < 20) ? 2 : cases [(number % 10 < 5) ? number % 10 : 5]];
 };
-
-export const createClass = (arr, currentClass) => {
-  const templFragment = document.createDocumentFragment();
-
-  arr.forEach((element) => {
-    const changedClass = `${currentClass}-- ${element}`;
-    const newElement = document.createElement('li');
-    newElement.classList.add(currentClass, changedClass);
-    templFragment.appendChild(newElement);
-  });
-
-  return templFragment;
-};
-
-export const createAdv = (elements = 10) => {
-  const arr = [];
-  for(let i = 1; i <= elements; i++) {
-    arr.push(createAdv());
-  }
-
-  return arr;
-}
