@@ -11,18 +11,20 @@ const accomodationPrice = {
   palace: 10000,
 };
 
-const onTypeChange = (evt) => {
-  checkInOption.value = evt.target.value;
-  checkOutOption.value = evt.target.value;
-};
+const onCheckTimeChange = (evt) => {
+  const { value } = evt.target;
+
+  checkInOption.value = value;
+  checkOutOption.value = value;
+}
 
 const onPriceChange = () => {
   priceOption.placeholder = accomodationPrice[typeOption.value];
   priceOption.min = accomodationPrice[typeOption.value];
 };
 
-checkOutOption.addEventListener('change', onTypeChange);
-
 onPriceChange();
 
 typeOption.addEventListener('change', onPriceChange);
+checkInOption.addEventListener('change', onCheckTimeChange );
+checkOutOption.addEventListener('change', onCheckTimeChange );

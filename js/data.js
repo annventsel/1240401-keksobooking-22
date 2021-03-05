@@ -106,6 +106,16 @@ const createObject = () => {
   };
 };
 
+export const createAdv = (elements = 10) => {
+  const arr = [];
+  for(let i = 1; i <= elements; i++) {
+    arr.push(createAdv());
+  }
+
+  return arr;
+}
+
+
 const newObject = new Array(objectsCount).fill(null).map(() => createObject());
 
-export {newObject};
+export default newObject;
