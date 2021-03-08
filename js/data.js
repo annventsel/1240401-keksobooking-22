@@ -74,16 +74,16 @@ const objectsCount = 10;
 let counter = 0;
 
 const createObject = () => {
-  //создание объекта author
+
   let author = {
     avatar: 'img/avatars/user0' + getRandomInt(1, 8) + '.png',
   };
-    //создание объекта location
+
   let location = {
     x: getRandomFloat(minLocationX, maxLocationX, 5),
     y: getRandomFloat(minLocationY, maxLocationY, 5),
   };
-    //создание объекта offer
+   
   let offer = {
     title: title[counter],
     address: location.x + ', ' + location.y,
