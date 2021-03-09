@@ -1,8 +1,8 @@
-import newObject from './data.js';
 import './util.js';
-import { createCard  } from './card.js';
 import './form.js';
 import './map.js';
+import { newObject } from './data.js';
+import { createCard } from './card.js';
 
 const mapCanvas = document.querySelector('.map__canvas');
 

@@ -83,7 +83,7 @@ const createObject = () => {
     x: getRandomFloat(minLocationX, maxLocationX, 5),
     y: getRandomFloat(minLocationY, maxLocationY, 5),
   };
-   
+
   let offer = {
     title: title[counter],
     address: location.x + ', ' + location.y,
@@ -109,7 +109,7 @@ const createObject = () => {
 export const createAdv = (elements = 10) => {
   const arr = [];
   for(let i = 1; i <= elements; i++) {
-    arr.push(createAdv());
+    arr.push(createObject());
   }
 
   return arr;
@@ -118,4 +118,6 @@ export const createAdv = (elements = 10) => {
 
 const newObject = new Array(objectsCount).fill(null).map(() => createObject());
 
-export default newObject;
+export {
+  newObject
+}

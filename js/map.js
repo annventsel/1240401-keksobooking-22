@@ -1,15 +1,15 @@
 /* global L:readonly */
 
-import { newObject } from './data.js';
 import { createCard  } from './card.js';
 
-const lat = 35.6895000;
-const lng = 139.6917100;
+const latitude = 35.6895000;
+const longitude = 139.6917100;
 const zoom = 12;
 const mainHightIcon = 52;
 const mainWidthIcon = 52;
 const hightIcon = 40;
 const widthIcon = 40;
+
 const mainIcon = {
   iconUrl: 'img/main-pin.svg',
   iconSize: [mainWidthIcon, mainHightIcon],
@@ -22,7 +22,25 @@ const regularIcon = {
   iconAnchor: [widthIcon / 2, hightIcon],
 };
 
+const addressInput = document.querySelector('#address');
+
+const fillAddress = ({lat, long}) => {
+
+  const latitudeX = lat.toFixed(digits);
+  const longitudeY = long.toFixed(digits);
+  addressInput.value = `${latitudeX} ${longitudeY}`;
+}
+
 const digits = 5;
+
+const map = L.map('map-canvas');
+const markers = [];
+
+const onMarkerMove = (evt) => {
+  const latX = evt.target.getLatLng().lat;
+  const lngY = evt.target.getLatLng().lng;
+  fillAddress(latX, lngY); //проверить функцию
+}
 
 const form = document.querySelector('.ad-form');
 const fieldsetForm = form.querySelectorAll('fieldset');
@@ -58,76 +76,97 @@ const activeForm = () => {
 };
 
 
-const map = L.map('map-canvas').on('load', () => {
-  activeForm();
-})
-  .setView({
-    lat: lat,
-    lng: lng,
-  }, zoom);
+const renderMarkers = (advert) => {
+  advert.forEach(({author, location, offer}) => {
 
-L.tileLayer(
-  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-  {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  },
-).addTo(map);
+    const icon = L.icon(
+      {
+        iconUrl: regularIcon.iconUrl,
+        iconSize: regularIcon.iconSize,
+        iconAnchor: regularIcon.iconAnchor,
+      });
+    const lat = location.lat;
+    const lng = location.lng;
 
-const mainPinIcon = L.icon(
-  {
-    iconUrl: mainIcon.iconUrl,
-    iconSize: mainIcon.iconSize,
-    iconAnchor: mainIcon.iconAnchor,
+    const marker = L.marker(
+      {
+        lat,
+        lng,
+      },
+      {
+        icon,
+      });
+
+    marker.addTo(map)
+      .bindPopup(createCard({author, offer}),
+        {
+          keepInView: true,
+        },
+      );
+    markers.push(marker);
   });
+}
 
-const marker = L.marker(
-  {
-    lat: lat,
-    lng: lng,
-  },
-  {
-    draggable: true,
-    icon: mainPinIcon,
-  },
-);
-marker.addTo(map);
+const removeMapMarkers = () => {
+  markers.forEach((marker) => {
+    marker.remove();
+  });
+}
 
+const setMap = (advert) => {
+  map.on('load', () => {
+    activeForm();
+    fillAddress(latitude, longitude);
+  })
+    .setView({
+      lat: latitude,
+      lng: longitude,
+    }, zoom);
 
-newObject.forEach((offer) => {
-
-  const regularPinIcon = L.icon(
+  L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
     {
-      iconUrl: regularIcon.iconUrl,
-      iconSize: regularIcon.iconSize,
-      iconAnchor: regularIcon.iconAnchor,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    },
+  ).addTo(map);
+
+  renderMarkers(advert);
+}
+
+const createMainPinMarker = () => {
+  const mainPinIcon = L.icon(
+    {
+      iconUrl: mainIcon.iconUrl,
+      iconSize: mainIcon.iconSize,
+      iconAnchor: mainIcon.iconAnchor,
     });
 
-  const regularMarker = L.marker(
+  const mainPinMarker = L.marker(
     {
-      lat: offer.offer.address.lat,
-      lng: offer.offer.address.lng,
+      lat: latitude,
+      lng: longitude,
     },
     {
-      regularPinIcon,
+      draggable: true,
+      icon: mainPinIcon,
     });
+  return mainPinMarker;
+}
 
-  regularMarker.addTo(map).bindPopup(createCard(offer));
+const mainPinMarker = createMainPinMarker();
 
-});
+mainPinMarker.addTo(map);
+mainPinMarker.on('move', onMarkerMove);
 
-const address = document.querySelector('#address');
+const onResetMainMarker = () => {
+  mainPinMarker.setLatLng(L.latLng(latitude, longitude));
+}
 
-address.value = `${map._lastCenter.lat} , ${map._lastCenter.lng}`;
-
-marker.on('moveend', (evt) => {
-  const move = evt.target.getLatLng();
-  const x = move.lng.toFixed(digits);
-  const y = move.lat.toFixed(digits);
-
-  address.value = `${x} , ${y}`;
-
-});
-
-const mapValidation = document.querySelector('#map');
-
-mapValidation;
+export {
+  setMap,
+  latitude,
+  longitude,
+  renderMarkers,
+  removeMapMarkers,
+  onResetMainMarker
+};
