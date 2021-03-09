@@ -13,13 +13,13 @@ const widthIcon = 40;
 const mainIcon = {
   iconUrl: 'img/main-pin.svg',
   iconSize: [mainWidthIcon, mainHightIcon],
-  iconAnchor: [mainWidthIcon/2, mainHightIcon],
+  iconAnchor: [mainWidthIcon / 2, mainHightIcon],
 };
 
 const regularIcon = {
   iconUrl: 'img/pin.svg',
   iconSize: [widthIcon, hightIcon],
-  iconAnchor: [widthIcon/2, hightIcon],
+  iconAnchor: [widthIcon / 2, hightIcon],
 };
 
 const digits = 5;
@@ -60,7 +60,6 @@ const activeForm = () => {
 
 const map = L.map('map-canvas').on('load', () => {
   activeForm();
-
 })
   .setView({
     lat: lat,
@@ -96,7 +95,7 @@ marker.addTo(map);
 
 newObject.forEach((offer) => {
 
-  const regularPinicon = L.icon(
+  const regularPinIcon = L.icon(
     {
       iconUrl: regularIcon.iconUrl,
       iconSize: regularIcon.iconSize,
@@ -109,7 +108,7 @@ newObject.forEach((offer) => {
       lng: offer.offer.address.lng,
     },
     {
-      regularPinicon,
+      regularPinIcon,
     });
 
   regularMarker.addTo(map).bindPopup(createCard(offer));
@@ -129,6 +128,6 @@ marker.on('moveend', (evt) => {
 
 });
 
-const mapValidation = document.querySelector('#map-canvas');
+const mapValidation = document.querySelector('#map');
 
 mapValidation;
