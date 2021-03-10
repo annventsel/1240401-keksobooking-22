@@ -2,8 +2,10 @@
 
 import { createCard  } from './card.js';
 
-const latitude = 35.6895000;
-const longitude = 139.6917100;
+const coords = {
+  LAT: 35.6895000,
+  LNG: 139.6917100,
+};
 const zoom = 12;
 const mainHightIcon = 52;
 const mainWidthIcon = 52;
@@ -24,23 +26,17 @@ const regularIcon = {
 
 const addressInput = document.querySelector('#address');
 
-const fillAddress = ({lat, long}) => {
-
-  const latitudeX = lat.toFixed(digits);
-  const longitudeY = long.toFixed(digits);
-  addressInput.value = `${latitudeX} ${longitudeY}`;
+const fillAddress = (lat, long) => {
+  addressInput.value = `${lat} ${long}`;
+  // console.log(lat, long);
 }
 
-const digits = 5;
 
-const map = L.map('map-canvas');
+const map = L.map('map-canvas').setView({
+  lat: coords.LAT,
+  lng: coords.LNG,
+}, zoom);
 const markers = [];
-
-const onMarkerMove = (evt) => {
-  const latX = evt.target.getLatLng().lat;
-  const lngY = evt.target.getLatLng().lng;
-  fillAddress(latX, lngY); //проверить функцию
-}
 
 const form = document.querySelector('.ad-form');
 const fieldsetForm = form.querySelectorAll('fieldset');
@@ -104,7 +100,15 @@ const renderMarkers = (advert) => {
         },
       );
     markers.push(marker);
+
+    // marker.on('moveend', (evt) => {
+    //   addressInput.value = fillAddress(evt.target.getLatLng());
+    // });
   });
+}
+
+const onMarkerMove = (evt) => {
+  fillAddress(evt.target.getLatLng());
 }
 
 const removeMapMarkers = () => {
@@ -113,14 +117,15 @@ const removeMapMarkers = () => {
   });
 }
 
+
 const setMap = (advert) => {
   map.on('load', () => {
     activeForm();
-    fillAddress(latitude, longitude);
+    fillAddress(coords.LAT, coords.LNG);
   })
     .setView({
-      lat: latitude,
-      lng: longitude,
+      lat: coords.LAT,
+      lng: coords.LNG,
     }, zoom);
 
   L.tileLayer(
@@ -143,8 +148,8 @@ const createMainPinMarker = () => {
 
   const mainPinMarker = L.marker(
     {
-      lat: latitude,
-      lng: longitude,
+      lat: coords.LAT,
+      lng: coords.LNG,
     },
     {
       draggable: true,
@@ -159,13 +164,11 @@ mainPinMarker.addTo(map);
 mainPinMarker.on('move', onMarkerMove);
 
 const onResetMainMarker = () => {
-  mainPinMarker.setLatLng(L.latLng(latitude, longitude));
+  mainPinMarker.setLatLng(L.latLng(coords.LAT, coords.LNG));
 }
 
 export {
   setMap,
-  latitude,
-  longitude,
   renderMarkers,
   removeMapMarkers,
   onResetMainMarker

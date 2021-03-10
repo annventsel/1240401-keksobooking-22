@@ -80,8 +80,8 @@ const createObject = () => {
   };
 
   let location = {
-    x: getRandomFloat(minLocationX, maxLocationX, 5),
-    y: getRandomFloat(minLocationY, maxLocationY, 5),
+    lat: getRandomFloat(minLocationX, maxLocationX, 5),
+    lng: getRandomFloat(minLocationY, maxLocationY, 5),
   };
 
   let offer = {
