@@ -99,7 +99,7 @@ const onChangeOption = () => {
   });
 }
 
-const validateForm = () => {
+const validateForm = () => {       // не пойму почему не работает :( ошибок в консоли нет
   onTypeChange();
   onChangeOption();
   typeOption.addEventListener('change', onTypeChange);
