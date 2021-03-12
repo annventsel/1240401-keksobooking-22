@@ -111,5 +111,7 @@ const validateForm = () => {
   titleInput.addEventListener('change', onChangeTitleSelect);
 }
 
-export {validateForm};
+export {
+  validateForm
+}
 
