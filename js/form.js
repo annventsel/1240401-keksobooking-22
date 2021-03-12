@@ -1,3 +1,5 @@
+// import {fillAddress} from './map.js'
+
 const form = document.querySelector('.ad-form');
 const typeOption = form.querySelector('#type');
 const priceOption = form.querySelector('#price');
@@ -115,3 +117,4 @@ export {
   validateForm
 }
 
+// ckjgjfg;adg'sdlglkdfsh
