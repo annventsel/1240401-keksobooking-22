@@ -38,47 +38,25 @@ const mapFilter = document.querySelector('.map__filters');
 // const mapIcons = mapFilter.querySelector('fieldset');
 // const mapForms = mapFilter.querySelectorAll('select');
 const addressInput = form.querySelector('#address');
+// const titleInput = form.querySelector('#title');
+
 
 const fillAddress = ({lat, lng}) => {
   addressInput.value = `${lat.toFixed(digits)} ${lng.toFixed(digits)}`;
 }
 
-const disabledForm = () => {
-  form.classList.add('ad-form--disabled');
+const setDisabledForm = () => {
   fieldsetForm.forEach((item) => {
     item.disabled = !item.disabled;
   });
-
-
-  mapFilter.classList.add('map__filters--disabled');
-  mapFilter.querySelectorAll('.map__filter').forEach((filter) => {
-    filter.classList.add('disabled');
-    mapFilter.querySelectorAll('.map__features').forEach((feature) => {
-      feature.classList.add('disabled');
-    });
-  })
 };
 
-disabledForm();
-
-const activeForm = () => {
-
-  form.classList.remove('ad-form--disabled');
-
-  fieldsetForm.forEach((item) => {
-    item.classList.remove('disabled')
-  });
-
-  mapFilter.classList.remove('map__filters--disabled');
-  mapFilter.querySelectorAll('.map__filter').forEach((filter) => {
-    filter.classList.remove('disabled');
-  });
-  mapFilter.querySelectorAll('.map__features').forEach((feature) => {
-    feature.classList.remove('disabled');
-  });
-
+const toggleState = () => {
+  form.classList.toggle('ad-form--disabled');
+  mapFilter.classList.toggle('map__filters--disabled');
 }
 
+setDisabledForm();
 
 const renderMarkers = (advert) => {
   advert.forEach(({author, location, offer}) => {
@@ -128,7 +106,7 @@ const removeMapMarkers = () => {
 
 const setMap = (advert) => {
   map.on('load', () => {
-    activeForm();
+    toggleState();
     fillAddress({lat: coords.LAT, lng: coords.LNG});
   })
     .setView({
@@ -179,5 +157,6 @@ export {
   setMap,
   renderMarkers,
   removeMapMarkers,
-  onResetMainMarker
+  onResetMainMarker,
+  fillAddress
 }
