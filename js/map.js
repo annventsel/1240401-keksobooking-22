@@ -50,6 +50,7 @@ const setDisabledForm = () => {
     item.disabled = !item.disabled;
   });
 };
+setDisabledForm();
 
 const toggleState = () => {
   form.classList.toggle('ad-form--disabled');
