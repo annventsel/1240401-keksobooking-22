@@ -116,5 +116,3 @@ const validateForm = () => {       // не пойму почему не рабо
 export {
   validateForm
 }
-
-// ckjgjfg;adg'sdlglkdfsh
