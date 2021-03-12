@@ -1,8 +1,6 @@
-import newAdv from './data.js';
 import './util.js';
-import { createCard  } from './card.js';
-import './form.js'
+import './form.js';
+import {setMap} from './map.js';
+import {newObject} from './data.js';
 
-const mapCanvas = document.querySelector('.map__canvas');
-
-mapCanvas.appendChild(createCard(newAdv[0]));
+setMap(newObject);

@@ -76,5 +76,5 @@ export const createCard = (advert) => {
 
   return cardItem;
 
-}
+};
 
