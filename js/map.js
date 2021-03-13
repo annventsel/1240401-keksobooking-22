@@ -152,7 +152,7 @@ mainPinMarker.on('move', onMarkerMove);
 
 const onResetMainMarker = () => {
   mainPinMarker.setLatLng(L.latLng(coords.LAT, coords.LNG));
-}
+} // Посмотри пожалуйста, я тут правильно сбрасываю настройки или надо так: setMap.setLatLng(L.latLng(coords.LAT, coords.LNG));
 
 export {
   setMap,

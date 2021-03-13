@@ -1,5 +1,8 @@
 // import {fillAddress} from './map.js'
 
+// Для доп проверки:
+
+
 const form = document.querySelector('.ad-form');
 const typeOption = form.querySelector('#type');
 const priceOption = form.querySelector('#price');
@@ -101,7 +104,7 @@ const onChangeOption = () => {
   });
 }
 
-const validateForm = () => {       // не пойму почему не работает :( ошибок в консоли нет
+const validateForm = () => {
   onTypeChange();
   onChangeOption();
   typeOption.addEventListener('change', onTypeChange);
@@ -116,3 +119,5 @@ const validateForm = () => {       // не пойму почему не рабо
 export {
   validateForm
 }
+
+
