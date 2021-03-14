@@ -1,7 +1,7 @@
-// import {fillAddress} from './map.js'
-
-// Для доп проверки:
-
+// import { SourceCode } from 'eslint';
+import {fillAddress, onResetMainMarker, onMarkerMove, resetMap} from './map.js'
+import {openSuccessMessage, openErrorMessage} from './messages.js'
+import {sendData} from './request.js';
 
 const form = document.querySelector('.ad-form');
 const typeOption = form.querySelector('#type');
@@ -57,20 +57,20 @@ const onTypeChange = () => {
 }
 
 
-const onChangeTitleSelect = () => {
+const onTitleSelectChange = () => {
   const valueLength = titleInput.value.length;
 
   if (valueLength < MIN_TITLE_LENGTH) {
-    titleInput.setCustomValidity('Заголовок должен состоять минимум из 30 символов');
+    titleInput.setCustomValidity(`Введите еще  ${MIN_TITLE_LENGTH - valueLength} симв`);
   } else if (valueLength > MAX_TITLE_LENGTH) {
-    titleInput.setCustomValidity('Заголовок не должен превышать 100 символов');
+    titleInput.setCustomValidity(`Заголовок не должен превышать ${MAX_TITLE_LENGTH} символов`);
   } else {
     titleInput.setCustomValidity('');
   }
   titleInput.reportValidity();
 }
 
-const onChangePriceSelect = () => {
+const onPriceSelectChange = () => {
   const price = priceOption.value;
   const type = typeOption.value;
   const minPrice = accomodationPrice[type];
@@ -85,7 +85,7 @@ const onChangePriceSelect = () => {
   priceOption.reportValidity();
 }
 
-const onChangeRoomsSelect = () => {
+const onRoomsSelectChange = () => {
   const guest = guestsCapacity.value;
   const room = roomNumberSelect.value;
 
@@ -104,17 +104,51 @@ const onChangeOption = () => {
   });
 }
 
+const sendForm = () => {
+  openSuccessMessage(),
+  form.reset();
+  onMarkerMove();
+};
+
+const showFormError = () => openErrorMessage();
+
+
+const submitForm = (evt) => {
+  evt.preventDefault();
+  sendData(sendForm, showFormError, new FormData(evt.target))
+};
+
+
+const resetForm = (evt) => {
+  evt.preventDefault();
+  form.reset();
+  resetMap();
+  onResetMainMarker();
+  onTypeChange();
+  fillAddress();
+};
+
+const resetButton = form.querySelector('.ad-form__reset');
+
+resetButton.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  resetForm();
+});
+
+
 const validateForm = () => {
   onTypeChange();
   onChangeOption();
   typeOption.addEventListener('change', onTypeChange);
   checkInOption.addEventListener('change', onCheckTimeChange );
   checkOutOption.addEventListener('change', onCheckTimeChange );
-  priceOption.addEventListener('change', onChangePriceSelect);
-  guestsCapacity.addEventListener('change', onChangeRoomsSelect);
-  roomNumberSelect.addEventListener('change', onChangeRoomsSelect);
-  titleInput.addEventListener('change', onChangeTitleSelect);
+  priceOption.addEventListener('change', onPriceSelectChange);
+  guestsCapacity.addEventListener('change', onRoomsSelectChange);
+  roomNumberSelect.addEventListener('change', onRoomsSelectChange);
+  titleInput.addEventListener('change', onTitleSelectChange);
+  form.addEventListener('submit', submitForm);
 }
+
 
 export {
   validateForm

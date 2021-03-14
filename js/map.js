@@ -125,6 +125,13 @@ const setMap = (advert) => {
   renderMarkers(advert);
 }
 
+const resetMap = () => {
+  setMap.setView({ // setMap() или setMap
+    lat: coords.LAT,
+    lng: coords.LNG,
+  }, zoom);
+}
+
 const createMainPinMarker = () => {
   const mainPinIcon = L.icon(
     {
@@ -156,6 +163,7 @@ const onResetMainMarker = () => {
 
 export {
   setMap,
+  resetMap,
   renderMarkers,
   removeMapMarkers,
   onResetMainMarker,
