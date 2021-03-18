@@ -11,8 +11,6 @@ const error = document.querySelector('#error').content.querySelector('.error');
 const errorMessage = error.cloneNode(true);
 
 
-// const errorButton = errorMessage.querySelector('.error__button');
-
 errorMessage.classList.add('hidden');
 
 const openSuccessMessage = () => {
@@ -46,7 +44,7 @@ const openErrorMessage = (textError) => {
   errorMessage.style.zIndex = '1000';
   document.body.appendChild(errorMessage);
 
-  const onEscapeClose = (evt) => {  //повторяющийся код как исправить?
+  const onEscapeClose = (evt) => {  
     if (isEscapeKeydown(evt)) {
       errorMessage.remove();
       document.removeEventListener('keydown', onEscapeClose);

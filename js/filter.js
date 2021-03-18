@@ -1,11 +1,7 @@
 /* global_:readonly */
-// import{clearMarkers} from './leaflet.js';
-// import {debounce} from './util.js';
 
 const PRICE_MAX = Infinity;
 const MARKERS_MAX = 10;
-// const DELAY = 500;
-
 
 const priceRate = {
   low: {
@@ -78,102 +74,3 @@ const filterData = (data) => {
 export {
   filterData
 }
-
-// const filter = document.querySelector('.map__filters');
-// const housingType = filter.querySelector('#housing-type');
-// const housingPrice = filter.querySelector('#housing-price');
-// const housingRooms = filter.querySelector('#housing-rooms');
-// const housingGuests = filter.querySelector('#housing-guests');
-// const housingFeatures = filter.querySelector('#housing-features');
-
-
-// const compareFatures = (checkboxes, feature) => {
-//   if (checkboxes.length === 0) {
-//     return true;
-//   }
-//   if (checkboxes.length > feature.length) {
-//     return false;
-//   }
-
-//   for (const checkbox of checkboxes) {
-//     if (!feature.includes(checkbox.value)) {
-//       return false
-//     }
-//   }
-
-//   return true;
-// }
-
-// const filterAdvert = (advert) => {
-//   const { offer } = advert;
-//   const {
-//     price,
-//     type,
-//     rooms,
-//     guests,
-//     features,
-//   } = offer;
-
-//   const featuresActive = housingFeatures.querySelectorAll('.map__checkbox:checked');
-
-//   let isFiltered = true;
-
-//   if (housingType.value === ALL &&
-//     housingPrice.value === ALL &&
-//     housingRooms.value === ALL &&
-//     housingGuests.value === ALL &&
-//     featuresActive.length === 0) {
-//     return true;
-//   }
-
-//   if (housingType.value !== ALL && housingType.value !== type) {
-//     return false;
-//   }
-
-//   if (housingGuests.value !== ALL && guests !== +housingGuests.value) {
-//     return false;
-//   }
-
-//   if (housingRooms.value !== ALL && +housingRooms.value !== rooms) {
-//     return false;
-//   }
-
-//   const priceRateValue = housingPrice.value;
-//   if (priceRate[priceRateValue].min >= price || priceRate[priceRateValue].max < price) {
-//     return false;
-//   }
-
-//   isFiltered = compareFatures(featuresActive, features);
-
-//   return isFiltered;
-// }
-
-// const filterMarkers = (data) => {
-//   const arr = [];
-//   let counter = 0;
-
-//   for (let i = 0; i < data.length; i++) {
-//     let advert = data[i];
-
-//     if (filterAdvert(advert)) {
-//       arr.push(advert);
-//       counter++
-//     }
-
-//     if (counter > MARKERS_MAX) {
-//       return arr;
-//     }
-//   }
-
-//   return arr;
-// };
-
-// const setFilter = (data) => {
-//   filter.addEventListener('change', _.debounce(() => {clearMarkers(data)}, DELAY));
-// }
-
-// export {
-//   setFilter,
-//   filterAdvert,
-//   filterMarkers
-// }

@@ -1,6 +1,4 @@
-// import { SourceCode } from 'eslint';
-// import {fillAddress, onMarkerMove} from './map.js'
-import {createMainPinMarker, setDisactiveState} from './leaflet.js'
+import {createMainPinMarker, setDisactiveState} from './map.js'
 import {openSuccessMessage, openErrorMessage} from './messages.js'
 import {sendData} from './request.js';
 
@@ -13,10 +11,6 @@ const roomNumberSelect = form.querySelector('#room_number');
 const guestsCapacity = form.querySelector('#capacity');
 const guestsCapacityOption = guestsCapacity.querySelectorAll('option');
 const inputAddress = form.querySelector('#address');
-
-// const MIN_TITLE_LENGTH = 30;
-// const MAX_TITLE_LENGTH = 100;
-// const MAX_PRICE_PER_NIGHT = 1000000;
 
 const accomodationPrice = {
   bungalow: 0,
@@ -105,15 +99,6 @@ const onFormSubmit = (evt) => {
   evt.preventDefault();
   sendData(sendForm, showFormError, new FormData(form))
 };
-
-
-// const resetForm = (evt) => {
-//   evt.preventDefault();
-//   form.reset();
-//   // resetMap();
-//   // onResetMainMarker();
-//   onTypeChange();
-// };
 
 const resetButton = form.querySelector('.ad-form__reset');
 

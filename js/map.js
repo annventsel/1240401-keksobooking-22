@@ -1,179 +1,142 @@
-// /* global L:readonly */
+/* global L:readonly */
 
-// import {createCard} from './card.js';
-// import {getData} from './request.js';
-// import {openErrorMessage} from './messages.js';
+import {createCard} from './card.js';
+import {filterData} from './filter.js';
 
-// const coords = {
-//   LAT: 35.6895000,
-//   LNG: 139.6917100,
-// };
-// const zoom = 12;
-// const mainHightIcon = 52;
-// const mainWidthIcon = 52;
-// const hightIcon = 40;
-// const widthIcon = 40;
+const coords = {
+  X: 35.6895000,
+  Y: 139.6917100,
+};
 
-// const digits = 5;
+const MAIN_PIN_PATH = 'img/main-pin.svg';
+const MARKER_PATH = 'img/pin.svg';
+const ICON_WIDTH = 40;
+const TILE_LAYER = 'http://{s}.tiles.maps.sputnik.ru/{z}/{x}/{y}.png';
+const COPYRIGHT = 'Map data: © <a href="http://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors, under ODbL | Tiles: © <a href="http://maps.sputnik.ru/" target="_blank">Спутник</a>';
+const ZOOM = 13;
 
-// const mainIcon = {
-//   iconUrl: 'img/main-pin.svg',
-//   iconSize: [mainWidthIcon, mainHightIcon],
-//   iconAnchor: [mainWidthIcon / 2, mainHightIcon],
-// };
+const form = document.querySelector('.ad-form');
+const fieldsetForm = document.querySelectorAll('select.map__filter, fieldset');
+const mapFilter = document.querySelector('.map__filters');
 
-// const regularIcon = {
-//   iconUrl: 'img/pin.svg',
-//   iconSize: [widthIcon, hightIcon],
-//   iconAnchor: [widthIcon / 2, hightIcon],
-// };
+let markerGroup;
 
-// const map = L.map('map-canvas');
-// const markers = [];
+const setDisabledForm = () => {
+  fieldsetForm.forEach((item) => {
+    item.disabled = !item.disabled;
+  });
+};
+setDisabledForm();
 
-// const form = document.querySelector('.ad-form');
-// const fieldsetForm = document.querySelectorAll('select.map__filter, fieldset');
-// const mapFilter = document.querySelector('.map__filters');
-// const addressInput = form.querySelector('#address');
+const setActiveState = () => {
+  form.classList.remove('ad-form--disabled');
+  mapFilter.classList.remove('map__filters--disabled');
+  setDisabledForm();
+}
 
-// const fillAddress = ({lat, lng}) => {
-//   addressInput.value = `${lat.toFixed(digits)} ${lng.toFixed(digits)}`;
-// }
+const setDisactiveState = () => {
+  form.classList.add('ad-form--disabled');
+  mapFilter.classList.add('map__filters--disabled');
+  setDisabledForm();
+}
 
-// const setDisabledForm = () => {
-//   fieldsetForm.forEach((item) => {
-//     item.disabled = !item.disabled;
-//   });
-// };
-// setDisabledForm();
+const map = L.map('map-canvas')
+  .on('load', () => {
+    setActiveState();
+  })
 
-// const setActiveState = () => {
-//   form.classList.remove('ad-form--disabled');
-//   mapFilter.classList.remove('map__filters--disabled');
-//   setDisabledForm();
-// }
+  .setView({
+    lat: coords.X,
+    lng: coords.Y,
+  }, ZOOM);
 
-// const setDisactiveState = () => {
-//   form.classList.add('ad-form--disabled');
-//   mapFilter.classList.add('map__filters--disabled');
-//   setDisabledForm();
-// }
+L.tileLayer(
+  TILE_LAYER,
+  {
+    attribution: COPYRIGHT,
+  },
+).addTo(map);
 
-// const renderMarkers = (advert) => {
-//   advert.forEach(({author, location, offer}) => {
+const resetMap = () => {
+  map.setView({
+    lat: coords.X,
+    lng: coords.Y,
+  }, ZOOM);
+};
 
-//     const icon = L.icon(
-//       {
-//         iconUrl: regularIcon.iconUrl,
-//         iconSize: regularIcon.iconSize,
-//         iconAnchor: regularIcon.iconAnchor,
-//       });
-//     const lat = location.lat;
-//     const lng = location.lng;
+const createMainPinMarker = () => {
+  const mainIcon = L.icon(
+    {
+      iconUrl: MAIN_PIN_PATH,
+      iconSize: [ICON_WIDTH, ICON_WIDTH],
+      iconAnchor: [ICON_WIDTH/2, ICON_WIDTH],
+    },
+  );
 
-//     const marker = L.marker(
-//       {
-//         lat,
-//         lng,
-//       },
-//       {
-//         icon,
-//       });
+  const marker = L.marker(
+    {
+      lat: coords.X,
+      lng: coords.Y,
+    },
+    {
+      draggable: true,
+      icon: mainIcon,
+    },
+  );
 
-//     marker.addTo(map)
-//       .bindPopup(createCard({author, offer}),
-//         {
-//           keepInView: true,
-//         },
-//       );
-//     markers.push(marker);
+  marker.addTo(map);
 
-//     marker.on('moveend', (evt) => {
-//       addressInput.value = fillAddress(evt.target.getLatLng());
-//     });
-//   });
-// }
+  return marker;
+}
 
-// const onMarkerMove = (evt) => {
-//   fillAddress(evt.target.getLatLng());
-// }
+const createMarker = (advert) => {
 
-// const removeMapMarkers = () => {
-//   markers.forEach((marker) => {
-//     marker.remove();
-//   });
-// }
+  const mainIcon = L.icon(
+    {
+      iconUrl: MARKER_PATH,
+      iconSize: [ICON_WIDTH, ICON_WIDTH],
+      iconAnchor: [ICON_WIDTH/2, ICON_WIDTH],
+    },
+  );
 
-// const onSuccess = (advert) => {
-//   renderMarkers(advert);
-// }
+  const marker = L.marker(
+    {
+      lat: advert.location.lat,
+      lng: advert.locatio.lat,
+    },
+    {
+      icon: mainIcon,
+    },
+  );
 
-// const onFail = (error) => {
-//   openErrorMessage(error);
-// }
+  marker.addTo(map);
+  marker.bindPopup(createCard(advert));
+}
 
-// const setMap = () => {
-//   map.on('load', () => {
-//     setActiveState();
-//     fillAddress({lat: coords.LAT, lng: coords.LNG});
-//     getData(onSuccess, onFail);
-//   })
-//     .setView({
-//       lat: coords.LAT,
-//       lng: coords.LNG,
-//     }, zoom);
 
-//   L.tileLayer(
-//     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-//     {
-//       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-//     },
-//   ).addTo(map);
-// }
+const removeMarkers = () => {
+  map.removeLayer(markerGroup);
+  map.closePopup();
+};
 
-// const resetMap = () => {
-//   setMap.setView(
-//     {
-//       lat: coords.LAT,
-//       lng: coords.LNG,
-//     }, zoom);
-// }
+const renderMarkers = (data) => {
+  const markers = filterData(data);
+  markerGroup = L.layerGroup(),
+  markers.forEach((element) => {createMarker(element, markerGroup)})
+  markerGroup.addTo(map);
+};
 
-// const createMainPinMarker = () => {
-//   const mainPinIcon = L.icon(
-//     {
-//       iconUrl: mainIcon.iconUrl,
-//       iconSize: mainIcon.iconSize,
-//       iconAnchor: mainIcon.iconAnchor,
-//     });
+const clearMarkers = (data) => {
+  removeMarkers();
+  renderMarkers(data);
+}
 
-//   const mainPinMarker = L.marker(
-//     {
-//       lat: coords.LAT,
-//       lng: coords.LNG,
-//     },
-//     {
-//       draggable: true,
-//       icon: mainPinIcon,
-//     });
-//   return mainPinMarker;
-// }
-
-// const mainPinMarker = createMainPinMarker();
-
-// mainPinMarker.addTo(map);
-// mainPinMarker.on('move', onMarkerMove);
-
-// const onResetMainMarker = () => {
-//   mainPinMarker.setLatLng(L.latLng(coords.LAT, coords.LNG));
-// } // Посмотри пожалуйста, я тут правильно сбрасываю настройки или надо так: setMap.setLatLng(L.latLng(coords.LAT, coords.LNG));
-
-// export {
-//   setMap,
-//   resetMap,
-//   removeMapMarkers,
-//   onResetMainMarker,
-//   onMarkerMove,
-//   fillAddress
-
-// }
+export {
+  clearMarkers,
+  renderMarkers,
+  removeMarkers,
+  createMarker,
+  createMainPinMarker,
+  resetMap,
+  setDisactiveState
+}
