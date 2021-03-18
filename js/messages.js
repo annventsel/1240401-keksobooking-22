@@ -10,6 +10,7 @@ const error = document.querySelector('#error').content.querySelector('.error');
 
 const errorMessage = error.cloneNode(true);
 
+
 // const errorButton = errorMessage.querySelector('.error__button');
 
 errorMessage.classList.add('hidden');
@@ -41,7 +42,7 @@ const openErrorMessage = (textError) => {
 
   errorMessage.classList.remove('hidden');
 
-  errorMessage.querySelector('.error__messsage').textContent = textError;
+  errorMessage.querySelector('.error__message').textContent = textError;
   errorMessage.style.zIndex = '1000';
   document.body.appendChild(errorMessage);
 

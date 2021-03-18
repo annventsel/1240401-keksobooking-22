@@ -32,7 +32,7 @@ const addFeatures = (data, container) => {
   }
 };
 
-export const createCard = (advert) => {
+const createCard = (advert) => {
   const {offer, author} = advert;
   const {
     title,
@@ -77,4 +77,8 @@ export const createCard = (advert) => {
   return cardItem;
 
 };
+
+export {
+  createCard
+}
 
