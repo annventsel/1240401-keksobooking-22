@@ -10,3 +10,5 @@ const URL = 'https://22.javascript.pages.academy/keksobooking/data';
 const successRender = (data) => renderMarkers(data);
 
 getData(URL, successRender);
+
+// ++

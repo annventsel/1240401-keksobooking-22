@@ -1,7 +1,6 @@
 /* global L:readonly */
 
 import {createCard} from './card.js';
-import {filterData} from './filter.js';
 
 const coords = {
   X: 35.6895000,
@@ -101,8 +100,8 @@ const createMarker = (advert) => {
 
   const marker = L.marker(
     {
-      lat: advert.location.lat,
-      lng: advert.locatio.lat,
+      lat: location.lat,
+      lng: location.lat,
     },
     {
       icon: mainIcon,
@@ -113,26 +112,19 @@ const createMarker = (advert) => {
   marker.bindPopup(createCard(advert));
 }
 
-
 const removeMarkers = () => {
   map.removeLayer(markerGroup);
   map.closePopup();
 };
 
 const renderMarkers = (data) => {
-  const markers = filterData(data);
-  markerGroup = L.layerGroup(),
-  markers.forEach((element) => {createMarker(element, markerGroup)})
-  markerGroup.addTo(map);
-};
-
-const clearMarkers = (data) => {
-  removeMarkers();
-  renderMarkers(data);
+  data.forEach((elem) => {
+    createMarker(elem);
+  })
 }
 
+
 export {
-  clearMarkers,
   renderMarkers,
   removeMarkers,
   createMarker,

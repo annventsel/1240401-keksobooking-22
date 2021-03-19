@@ -44,7 +44,7 @@ const openErrorMessage = (textError) => {
   errorMessage.style.zIndex = '1000';
   document.body.appendChild(errorMessage);
 
-  const onEscapeClose = (evt) => {  
+  const onEscapeClose = (evt) => {
     if (isEscapeKeydown(evt)) {
       errorMessage.remove();
       document.removeEventListener('keydown', onEscapeClose);
@@ -62,3 +62,5 @@ export {
   openSuccessMessage,
   openErrorMessage
 }
+
+// ++
