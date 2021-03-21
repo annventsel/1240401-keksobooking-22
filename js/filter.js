@@ -1,7 +1,9 @@
-/* global_:readonly */
+import {debounce} from './util.js';
+import {removeMapPin, renderMarkers} from './map.js';
 
 const PRICE_MAX = Infinity;
 const MARKERS_MAX = 10;
+const RENDER_DELAY = 500;
 
 const priceRate = {
   low: {
@@ -24,6 +26,7 @@ const priceRate = {
 
 const ALL = 'any';
 
+const filterForm = document.querySelector('.map__filters');
 const filters = Array.from(document.querySelector('.map__filters').children);
 
 const filterRules = {
@@ -71,8 +74,21 @@ const filterData = (data) => {
   return offers;
 };
 
-export {
-  filterData
-}
+const onFiltersChange = (data) => {
+  return debounce((evt) => {
+    evt.preventDefault();
+    const filteredData = filterData(data);
+    removeMapPin();
+    renderMarkers(filteredData);
+  }, RENDER_DELAY);
+};
 
-// ++
+const setFilter = (data) => {
+  filterForm.addEventListener('change', onFiltersChange(data));
+};
+
+export {
+  filterData,
+  MARKERS_MAX,
+  setFilter
+}

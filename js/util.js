@@ -36,11 +36,31 @@ const isEscapeKeydown = (evt) => {
   return evt.key === 'Escape' || evt.key === 'Esc';
 };
 
+const debounce = (fn, wait) => {
+  let timeout;
+  return function () {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => fn.apply(this, arguments), wait);
+  }
+};
+
+const createImg = (width = '50', height = '50', alt = '') => {
+  const img = document.createElement('img');
+  img.src = '';
+  img.width = width;
+  img.height = height;
+  img.alt = alt;
+
+  return img;
+}
+
 export {
   getRandomInt,
   getRandomFloat,
   getRandomString,
   shuffleArray,
   declination,
-  isEscapeKeydown
+  isEscapeKeydown,
+  debounce,
+  createImg
 }

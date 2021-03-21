@@ -1,6 +1,6 @@
-import {createMainPinMarker, setDisactiveState} from './map.js'
+import {onMarkerMove} from './map.js'
 import {openSuccessMessage, openErrorMessage} from './messages.js'
-import {sendData} from './request.js';
+import {request} from './request.js';
 
 const form = document.querySelector('.ad-form');
 const typeOption = form.querySelector('#type');
@@ -10,7 +10,6 @@ const checkOutOption = form.querySelector('#timeout');
 const roomNumberSelect = form.querySelector('#room_number');
 const guestsCapacity = form.querySelector('#capacity');
 const guestsCapacityOption = guestsCapacity.querySelectorAll('option');
-const inputAddress = form.querySelector('#address');
 
 const accomodationPrice = {
   bungalow: 0,
@@ -74,22 +73,11 @@ const onTypeChange = () => {
 
 typeOption.addEventListener('change', onTypeChange);
 
-const onMarkerMove = () => {
-  const address = addressMarker.getLatLng();
-  inputAddress.value = `${address.lat.toFixed(5)} ${address.lng.toFixed(5)}`;
-};
-
-const addressMarker = createMainPinMarker();
-addressMarker.on('move', onMarkerMove);
-inputAddress.readOnly = true;
-onMarkerMove();
-
 
 const sendForm = () => {
   openSuccessMessage(),
   form.reset();
   onMarkerMove();
-  setDisactiveState();
 };
 
 const showFormError = () => openErrorMessage();
@@ -97,7 +85,7 @@ const showFormError = () => openErrorMessage();
 
 const onFormSubmit = (evt) => {
   evt.preventDefault();
-  sendData(sendForm, showFormError, new FormData(form))
+  request(sendForm, showFormError, 'POST', new FormData(form))
 };
 
 const resetButton = form.querySelector('.ad-form__reset');
@@ -105,10 +93,7 @@ const resetButton = form.querySelector('.ad-form__reset');
 resetButton.addEventListener('click', (evt) => {
   evt.preventDefault();
   form.reset();
+  onMarkerMove();
 });
 
-
-
 form.addEventListener('submit', onFormSubmit);
-
-// ++
