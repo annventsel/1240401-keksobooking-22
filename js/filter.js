@@ -4,6 +4,7 @@ import {removeMapPin, renderMarkers} from './map.js';
 const PRICE_MAX = Infinity;
 const MARKERS_MAX = 10;
 const RENDER_DELAY = 500;
+const ALL = 'any';
 
 const priceRate = {
   low: {
@@ -23,8 +24,6 @@ const priceRate = {
     max: PRICE_MAX,
   },
 }
-
-const ALL = 'any';
 
 const filterForm = document.querySelector('.map__filters');
 const filters = Array.from(document.querySelector('.map__filters').children);

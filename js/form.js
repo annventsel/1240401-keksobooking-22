@@ -30,8 +30,6 @@ const validateRooms = () => {
   let roomValue = roomNumberSelect.value;
 
   guestsCapacityOption .forEach((option) => {
-    // метод индексОф сравнивает искомый элемент с элементами массива, если в массиве нет элемента, то возвращает -1. Если мы в условии задаем, что индексОф должен быть >= 0, то таким образом мы просто скрываем или не выводим отрицательный результат поиска.
-    // в данном случае, форич перебирает все возможные варианты количества мест для гостей и isDisabled проверяет, когда количество гостей не совпадает с возможной вместимостью, то мы не показываем остальные варианты, которые нам не подходят.
     let isDisabled = !(guestsNumber[roomValue].indexOf(option.value) >= 0);
     option.selected = guestsNumber[roomValue][0] === option.value;
     option.disabled = isDisabled;
@@ -74,15 +72,20 @@ const onTypeChange = () => {
 
 typeOption.addEventListener('change', onTypeChange);
 
+const setFormToDefault = () => {
+  form.reset();
+  resetMap();
+  onMarkerMove();
+  resetMarker();
+  resetPhotoPreview();
+}
 
 const sendForm = () => {
   openSuccessMessage(),
-  form.reset();
-  onMarkerMove();
+  setFormToDefault();
 };
 
 const showFormError = () => openErrorMessage();
-
 
 const onFormSubmit = (evt) => {
   evt.preventDefault();
@@ -93,12 +96,7 @@ const resetButton = form.querySelector('.ad-form__reset');
 
 resetButton.addEventListener('click', (evt) => {
   evt.preventDefault();
-  form.reset();
-  resetMap();
-  onMarkerMove();
-  resetMarker();
-  resetPhotoPreview();
+  setFormToDefault();
 });
 
 form.addEventListener('submit', onFormSubmit);
-

@@ -2,15 +2,7 @@
 
 import {createCard} from './card.js';
 import {request} from './request.js';
-// import {getData} from './request.js';
 import {filterData, MARKERS_MAX} from './filter.js';
-
-const coords = {
-  X: 35.68407,
-  Y: 139.75159,
-};
-
-const num = 5;
 
 const MAIN_PIN_PATH = 'img/main-pin.svg';
 const MARKER_PATH = 'img/pin.svg';
@@ -20,17 +12,23 @@ const COPYRIGHT = 'Map data: © <a href="http://www.openstreetmap.org/copyright"
 const ZOOM = 13;
 
 const DELAY = 8000;
+const NUM = 5;
+
+const coords = {
+  X: 35.68407,
+  Y: 139.75159,
+};
 
 const form = document.querySelector('.ad-form');
+const inputAddress = form.querySelector('#address');
 const fieldsetForm = document.querySelectorAll('select.map__filter, fieldset');
 const mapFilter = document.querySelector('.map__filters');
-const inputAddress = form.querySelector('#address');
 
 const setDisabledForm = () => {
   fieldsetForm.forEach((item) => {
     item.disabled = !item.disabled;
   });
-};
+}
 setDisabledForm();
 
 const setActiveState = () => {
@@ -71,7 +69,7 @@ const resetMap = () => {
 
 const onMarkerMove = () => {
   const address = marker.getLatLng();
-  inputAddress.value = `${address.lat.toFixed(num)} ${address.lng.toFixed(num)}`;
+  inputAddress.value = `${address.lat.toFixed(NUM)} ${address.lng.toFixed(NUM)}`;
 };
 
 

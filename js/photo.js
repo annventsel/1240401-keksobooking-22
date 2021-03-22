@@ -7,6 +7,7 @@ const advertPreview = document.querySelector('.ad-form__input');
 const IMG_FORMAT = ['image/jpg', 'image/jpeg', 'image/png', 'image/svg', 'image/svg+xml'];
 const ALT_TEXT = 'Фотография аппартаментов';
 const AVATAR_SRC = 'img/muffin-red.svg';
+const SIZE = 70;
 
 const onPreviewPictureChange = (load, preview) => {
   const file = load.files[0];
@@ -14,7 +15,7 @@ const onPreviewPictureChange = (load, preview) => {
   const format = IMG_FORMAT.includes(typeOfFile);
 
   if (preview.children.length === 0 && format) {
-    preview.appendChild(createImg(ALT_TEXT, 70, 70))
+    preview.appendChild(createImg(ALT_TEXT, SIZE, SIZE));
   }
 
   if (format) {
@@ -37,5 +38,5 @@ avatarPreview.addEventListener('change', () => onPreviewPictureChange(avatarPrev
 advertPreview.addEventListener('change', () => onPreviewPictureChange(advertPreview, advertPic));
 
 export {
-  resetPhotoPreview 
+  resetPhotoPreview
 }
