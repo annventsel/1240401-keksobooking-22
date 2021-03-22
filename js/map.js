@@ -98,6 +98,10 @@ marker.addTo(map).on('move', onMarkerMove);
 
 onMarkerMove();
 
+const resetMarker = () => {
+  marker.setLatLng([coords.X, coords.Y])
+}
+
 const layerGroup = L.layerGroup().addTo(map);
 
 const removeMapPin = () => {
@@ -132,6 +136,11 @@ const renderMarkers = (data) => {
   data.forEach((elem) => {
     createMarker(elem);
   })
+};
+
+const clearMarkers = () => {
+  map.removeLayer(layerGroup);
+  map.closePopup();
 }
 
 let adverts = [];
@@ -180,5 +189,7 @@ export {
   onMarkerMove,
   errorHandler,
   setDisactiveState,
-  resetMap
+  resetMap,
+  clearMarkers,
+  resetMarker
 }

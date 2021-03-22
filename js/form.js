@@ -1,6 +1,7 @@
-import {onMarkerMove} from './map.js'
+import {onMarkerMove, resetMap, resetMarker} from './map.js'
 import {openSuccessMessage, openErrorMessage} from './messages.js'
 import {request} from './request.js';
+import {resetPhotoPreview} from './photo.js';
 
 const form = document.querySelector('.ad-form');
 const typeOption = form.querySelector('#type');
@@ -93,7 +94,11 @@ const resetButton = form.querySelector('.ad-form__reset');
 resetButton.addEventListener('click', (evt) => {
   evt.preventDefault();
   form.reset();
+  resetMap();
   onMarkerMove();
+  resetMarker();
+  resetPhotoPreview();
 });
 
 form.addEventListener('submit', onFormSubmit);
+

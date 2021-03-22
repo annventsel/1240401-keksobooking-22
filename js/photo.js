@@ -6,6 +6,7 @@ const advertPic = document.querySelector('.ad-form__photo');
 const advertPreview = document.querySelector('.ad-form__input');
 const IMG_FORMAT = ['image/jpg', 'image/jpeg', 'image/png', 'image/svg', 'image/svg+xml'];
 const ALT_TEXT = 'Фотография аппартаментов';
+const AVATAR_SRC = 'img/muffin-red.svg';
 
 const onPreviewPictureChange = (load, preview) => {
   const file = load.files[0];
@@ -26,5 +27,15 @@ const onPreviewPictureChange = (load, preview) => {
   }
 }
 
+const resetPhotoPreview = () => {
+  const avatarImg = avatarPic.querySelector('img');
+  avatarImg.src = AVATAR_SRC;
+  advertPic.innerHTML = '';
+}
+
 avatarPreview.addEventListener('change', () => onPreviewPictureChange(avatarPreview, avatarPic));
 advertPreview.addEventListener('change', () => onPreviewPictureChange(advertPreview, advertPic));
+
+export {
+  resetPhotoPreview 
+}
