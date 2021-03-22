@@ -1,6 +1,7 @@
 import './util.js';
 import './form.js';
-import {setMap} from './map.js';
-import {newObject} from './data.js';
-
-setMap(newObject);
+import './messages.js';
+import './card.js';
+import './request.js';
+import './map.js';
+import './photo.js'

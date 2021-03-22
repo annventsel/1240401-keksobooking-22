@@ -1,16 +1,15 @@
+import {onMarkerMove} from './map.js'
+import {openSuccessMessage, openErrorMessage} from './messages.js'
+import {request} from './request.js';
+
 const form = document.querySelector('.ad-form');
 const typeOption = form.querySelector('#type');
 const priceOption = form.querySelector('#price');
 const checkInOption = form.querySelector('#timein');
 const checkOutOption = form.querySelector('#timeout');
-const titleInput = form.querySelector('#title');
 const roomNumberSelect = form.querySelector('#room_number');
 const guestsCapacity = form.querySelector('#capacity');
 const guestsCapacityOption = guestsCapacity.querySelectorAll('option');
-
-const MIN_TITLE_LENGTH = 30;
-const MAX_TITLE_LENGTH = 100;
-const MAX_PRICE_PER_NIGHT = 1000000;
 
 const accomodationPrice = {
   bungalow: 0,
@@ -19,24 +18,33 @@ const accomodationPrice = {
   palace: 10000,
 };
 
-const roomsCapacity = {
-  1: {
-    value: [1],
-    error: 'Только один гость',
-  },
-  2: {
-    value: [1, 2],
-    error: 'Не более 2 гостей и не менее 1',
-  },
-  3: {
-    value: [1, 2, 3],
-    error: 'Не более 3 гостей и не менее 1',
-  },
-  100: {
-    value: [0],
-    error: 'Не для гостей!',
-  },
+const guestsNumber = {
+  1: ['1'],
+  2: ['1', '2'],
+  3: ['1', '2', '3'],
+  100: ['0'],
 }
+
+const validateRooms = () => {
+  let roomValue = roomNumberSelect.value;
+
+  guestsCapacityOption .forEach((option) => {
+    // метод индексОф сравнивает искомый элемент с элементами массива, если в массиве нет элемента, то возвращает -1. Если мы в условии задаем, что индексОф должен быть >= 0, то таким образом мы просто скрываем или не выводим отрицательный результат поиска.
+    // в данном случае, форич перебирает все возможные варианты количества мест для гостей и isDisabled проверяет, когда количество гостей не совпадает с возможной вместимостью, то мы не показываем остальные варианты, которые нам не подходят.
+    let isDisabled = !(guestsNumber[roomValue].indexOf(option.value) >= 0);
+    option.selected = guestsNumber[roomValue][0] === option.value;
+    option.disabled = isDisabled;
+    option.hidden = isDisabled;
+  });
+}
+
+validateRooms();
+
+const onRoomNumberChange = () => {
+  validateRooms();
+};
+
+roomNumberSelect.addEventListener('change', onRoomNumberChange);
 
 
 const onCheckTimeChange = (evt) => {
@@ -44,72 +52,48 @@ const onCheckTimeChange = (evt) => {
 
   checkInOption.value = value;
   checkOutOption.value = value;
-}
+};
+
+const onCheckInOptionChange = (evt) => {
+  onCheckTimeChange(evt);
+};
+
+const onCheckOutOptionChange = (evt) => {
+  onCheckTimeChange(evt);
+};
+
+checkInOption.addEventListener('change', onCheckInOptionChange);
+checkOutOption.addEventListener('change', onCheckOutOptionChange);
+
 
 const onTypeChange = () => {
   priceOption.placeholder = accomodationPrice[typeOption.value];
   priceOption.min = accomodationPrice[typeOption.value];
-}
+};
+
+typeOption.addEventListener('change', onTypeChange);
 
 
-const onChangeTitleSelect = () => {
-  const valueLength = titleInput.value.length;
+const sendForm = () => {
+  openSuccessMessage(),
+  form.reset();
+  onMarkerMove();
+};
 
-  if (valueLength < MIN_TITLE_LENGTH) {
-    titleInput.setCustomValidity('Заголовок должен состоять минимум из 30 символов');
-  } else if (valueLength > MAX_TITLE_LENGTH) {
-    titleInput.setCustomValidity('Заголовок не должен превышать 100 символов');
-  } else {
-    titleInput.setCustomValidity('');
-  }
-  titleInput.reportValidity();
-}
+const showFormError = () => openErrorMessage();
 
-const onChangePriceSelect = () => {
-  const price = priceOption.value;
-  const type = typeOption.value;
-  const minPrice = accomodationPrice[type];
 
-  if (price < minPrice) {
-    priceOption.setCustomValidity(`Стоимость должна быть не менее ${minPrice}`);
-  } else if (price > MAX_PRICE_PER_NIGHT) {
-    priceOption.setCustomValidity(`Стоимость не должна превышать ${MAX_PRICE_PER_NIGHT}`);
-  } else {
-    priceOption.setCustomValidity('');
-  }
-  priceOption.reportValidity();
-}
+const onFormSubmit = (evt) => {
+  evt.preventDefault();
+  request(sendForm, showFormError, 'POST', new FormData(form))
+};
 
-const onChangeRoomsSelect = () => {
-  const guest = guestsCapacity.value;
-  const room = roomNumberSelect.value;
+const resetButton = form.querySelector('.ad-form__reset');
 
-  if (!roomsCapacity[room].value.includes(guest)) {
-    guestsCapacity.setCustomValidity(roomsCapacity[room].error);
-  } else {
-    guestsCapacity.setCustomValidity('');
-  }
-}
+resetButton.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  form.reset();
+  onMarkerMove();
+});
 
-const onChangeOption = () => {
-  guestsCapacityOption.forEach((option) => {
-    if (option.value === '1') {
-      option.selected = true;
-    }
-  });
-}
-
-const validateForm = () => {
-  onTypeChange();
-  onChangeOption();
-  typeOption.addEventListener('change', onTypeChange);
-  checkInOption.addEventListener('change', onCheckTimeChange );
-  checkOutOption.addEventListener('change', onCheckTimeChange );
-  priceOption.addEventListener('change', onChangePriceSelect);
-  guestsCapacity.addEventListener('change', onChangeRoomsSelect);
-  roomNumberSelect.addEventListener('change', onChangeRoomsSelect);
-  titleInput.addEventListener('change', onChangeTitleSelect);
-}
-
-export {validateForm};
-
+form.addEventListener('submit', onFormSubmit);

@@ -1,11 +1,15 @@
 import {declination} from './util.js'
-import {wordsDecl} from './data.js'
 
 const convertType = {
   palace: 'Дворец',
   flat: 'Квартира',
   house: 'Дом',
   bungalow: 'Бунгало',
+};
+
+const wordsDecl = {
+  room: ['комната', 'комнаты', 'комнат'],
+  guest: ['гостя', 'гостей', 'гостей'],
 };
 
 const getPhotos = (arr, photo) => {
@@ -32,7 +36,7 @@ const addFeatures = (data, container) => {
   }
 };
 
-export const createCard = (advert) => {
+const createCard = (advert) => {
   const {offer, author} = advert;
   const {
     title,
@@ -78,3 +82,6 @@ export const createCard = (advert) => {
 
 };
 
+export {
+  createCard
+}

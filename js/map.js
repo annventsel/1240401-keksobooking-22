@@ -1,162 +1,184 @@
 /* global L:readonly */
 
-import { createCard  } from './card.js';
+import {createCard} from './card.js';
+import {request} from './request.js';
+// import {getData} from './request.js';
+import {filterData, MARKERS_MAX} from './filter.js';
 
 const coords = {
-  LAT: 35.6895000,
-  LNG: 139.6917100,
-};
-const zoom = 12;
-const mainHightIcon = 52;
-const mainWidthIcon = 52;
-const hightIcon = 40;
-const widthIcon = 40;
-
-const digits = 5;
-
-const mainIcon = {
-  iconUrl: 'img/main-pin.svg',
-  iconSize: [mainWidthIcon, mainHightIcon],
-  iconAnchor: [mainWidthIcon / 2, mainHightIcon],
+  X: 35.68407,
+  Y: 139.75159,
 };
 
-const regularIcon = {
-  iconUrl: 'img/pin.svg',
-  iconSize: [widthIcon, hightIcon],
-  iconAnchor: [widthIcon / 2, hightIcon],
-};
+const num = 5;
 
-const map = L.map('map-canvas').setView({
-  lat: coords.LAT,
-  lng: coords.LNG,
-}, zoom);
-const markers = [];
+const MAIN_PIN_PATH = 'img/main-pin.svg';
+const MARKER_PATH = 'img/pin.svg';
+const ICON_WIDTH = 40;
+const TILE_LAYER = 'http://{s}.tiles.maps.sputnik.ru/{z}/{x}/{y}.png';
+const COPYRIGHT = 'Map data: © <a href="http://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors, under ODbL | Tiles: © <a href="http://maps.sputnik.ru/" target="_blank">Спутник</a>';
+const ZOOM = 13;
+
+const DELAY = 8000;
 
 const form = document.querySelector('.ad-form');
-const fieldsetForm = form.querySelectorAll('select.map__filter, fieldset');
+const fieldsetForm = document.querySelectorAll('select.map__filter, fieldset');
 const mapFilter = document.querySelector('.map__filters');
-// const mapIcons = mapFilter.querySelector('fieldset');
-// const mapForms = mapFilter.querySelectorAll('select');
-const addressInput = form.querySelector('#address');
-// const titleInput = form.querySelector('#title');
-
-
-const fillAddress = ({lat, lng}) => {
-  addressInput.value = `${lat.toFixed(digits)} ${lng.toFixed(digits)}`;
-}
+const inputAddress = form.querySelector('#address');
 
 const setDisabledForm = () => {
   fieldsetForm.forEach((item) => {
     item.disabled = !item.disabled;
   });
 };
-
-const toggleState = () => {
-  form.classList.toggle('ad-form--disabled');
-  mapFilter.classList.toggle('map__filters--disabled');
-}
-
 setDisabledForm();
 
-const renderMarkers = (advert) => {
-  advert.forEach(({author, location, offer}) => {
-
-    const icon = L.icon(
-      {
-        iconUrl: regularIcon.iconUrl,
-        iconSize: regularIcon.iconSize,
-        iconAnchor: regularIcon.iconAnchor,
-      });
-    const lat = location.lat;
-    const lng = location.lng;
-
-    const marker = L.marker(
-      {
-        lat,
-        lng,
-      },
-      {
-        icon,
-      });
-
-    marker.addTo(map)
-      .bindPopup(createCard({author, offer}),
-        {
-          keepInView: true,
-        },
-      );
-    markers.push(marker);
-
-    marker.on('moveend', (evt) => {
-      addressInput.value = fillAddress(evt.target.getLatLng());
-    });
-  });
+const setActiveState = () => {
+  form.classList.remove('ad-form--disabled');
+  mapFilter.classList.remove('map__filters--disabled');
+  setDisabledForm();
 }
 
-const onMarkerMove = (evt) => {
-  fillAddress(evt.target.getLatLng());
+const setDisactiveState = () => {
+  form.classList.add('ad-form--disabled');
+  mapFilter.classList.add('map__filters--disabled');
+  setDisabledForm();
 }
 
-const removeMapMarkers = () => {
-  markers.forEach((marker) => {
-    marker.remove();
-  });
-}
-
-
-const setMap = (advert) => {
-  map.on('load', () => {
-    toggleState();
-    fillAddress({lat: coords.LAT, lng: coords.LNG});
+const map = L.map('map-canvas')
+  .on('load', () => {
+    setActiveState();
   })
-    .setView({
-      lat: coords.LAT,
-      lng: coords.LNG,
-    }, zoom);
 
-  L.tileLayer(
-    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  .setView({
+    lat: coords.X,
+    lng: coords.Y,
+  }, ZOOM);
+
+L.tileLayer(
+  TILE_LAYER,
+  {
+    attribution: COPYRIGHT,
+  },
+).addTo(map);
+
+const resetMap = () => {
+  map.setView({
+    lat: coords.X,
+    lng: coords.Y,
+  }, ZOOM);
+};
+
+const onMarkerMove = () => {
+  const address = marker.getLatLng();
+  inputAddress.value = `${address.lat.toFixed(num)} ${address.lng.toFixed(num)}`;
+};
+
+
+const mainIcon = L.icon(
+  {
+    iconUrl: MAIN_PIN_PATH,
+    iconSize: [ICON_WIDTH, ICON_WIDTH],
+    iconAnchor: [ICON_WIDTH/2, ICON_WIDTH],
+  },
+);
+
+const marker = L.marker(
+  {
+    lat: coords.X,
+    lng: coords.Y,
+  },
+  {
+    draggable: true,
+    icon: mainIcon,
+  },
+);
+
+marker.addTo(map).on('move', onMarkerMove);
+
+onMarkerMove();
+
+const layerGroup = L.layerGroup().addTo(map);
+
+const removeMapPin = () => {
+  layerGroup.clearLayers();
+};
+
+const createMarker = (advert) => {
+
+  const mainIcon = L.icon(
     {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      iconUrl: MARKER_PATH,
+      iconSize: [ICON_WIDTH, ICON_WIDTH],
+      iconAnchor: [ICON_WIDTH/2, ICON_WIDTH],
     },
-  ).addTo(map);
+  );
 
-  renderMarkers(advert);
-}
-
-const createMainPinMarker = () => {
-  const mainPinIcon = L.icon(
+  const marker = L.marker(
     {
-      iconUrl: mainIcon.iconUrl,
-      iconSize: mainIcon.iconSize,
-      iconAnchor: mainIcon.iconAnchor,
-    });
-
-  const mainPinMarker = L.marker(
-    {
-      lat: coords.LAT,
-      lng: coords.LNG,
+      lat: advert.location.lat,
+      lng: advert.location.lng,
     },
     {
-      draggable: true,
-      icon: mainPinIcon,
-    });
-  return mainPinMarker;
+      icon: mainIcon,
+    },
+  );
+
+  marker.addTo(layerGroup);
+  marker.bindPopup(createCard(advert));
+};
+
+const renderMarkers = (data) => {
+  data.forEach((elem) => {
+    createMarker(elem);
+  })
 }
 
-const mainPinMarker = createMainPinMarker();
+let adverts = [];
 
-mainPinMarker.addTo(map);
-mainPinMarker.on('move', onMarkerMove);
-
-const onResetMainMarker = () => {
-  mainPinMarker.setLatLng(L.latLng(coords.LAT, coords.LNG));
+const onMapFiltersChange = () => {
+  removeMapPin();
+  renderMarkers(filterData(adverts));
 }
+
+const successRender = (data) => {
+  adverts = data.slice();
+
+  renderMarkers(adverts.slice(0, MARKERS_MAX));
+
+  mapFilter.addEventListener('change', onMapFiltersChange);
+}
+
+const errorHandler = () => {
+  const container = document.createElement('div');
+  container.style.zIndex = 800;
+  container.style.position = 'absolute';
+  container.style.left = 0;
+  container.style.right = 0;
+  container.style.top = 0;
+  container.style.padding = '10px 10px';
+  container.style.fontSize = '28px'
+  container.style.textAlign = 'center';
+  container.style.backgroundColor = 'white';
+  container.style.color = 'red';
+  container.style.border = '5px solid red';
+  container.textContent = 'Ошибка! Данные не получены!';
+
+  document.body.append(container);
+
+  setTimeout(() => {
+    container.remove();
+  }, DELAY);
+}
+
+request(successRender, errorHandler, 'GET');
+
 
 export {
-  setMap,
   renderMarkers,
-  removeMapMarkers,
-  onResetMainMarker,
-  fillAddress
+  removeMapPin,
+  onMarkerMove,
+  errorHandler,
+  setDisactiveState,
+  resetMap
 }
