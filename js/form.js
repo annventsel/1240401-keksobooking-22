@@ -4,6 +4,7 @@ import {request} from './request.js';
 import {resetPhotoPreview} from './photo.js';
 
 const form = document.querySelector('.ad-form');
+const filterForm = document.querySelector('.map__filters');
 const typeOption = form.querySelector('#type');
 const priceOption = form.querySelector('#price');
 const checkInOption = form.querySelector('#timein');
@@ -72,17 +73,24 @@ const onTypeChange = () => {
 
 typeOption.addEventListener('change', onTypeChange);
 
-const setFormToDefault = () => {
-  form.reset();
-  resetMap();
-  onMarkerMove();
-  resetMarker();
-  resetPhotoPreview();
-}
+// const setFormToDefault = (evt) => {
+//   evt.preventDefault();
+//   form.reset();
+//   mapFilter.reset();
+//   resetMap();
+//   onMarkerMove();
+//   resetMarker();
+//   resetPhotoPreview();
+//   removeMapPin();
+//   renderMarkers();
+// }
 
 const sendForm = () => {
   openSuccessMessage(),
-  setFormToDefault();
+  form.reset();
+  filterForm.reset();
+  onMarkerMove();
+  resetMarker();
 };
 
 const showFormError = () => openErrorMessage();
@@ -96,7 +104,11 @@ const resetButton = form.querySelector('.ad-form__reset');
 
 resetButton.addEventListener('click', (evt) => {
   evt.preventDefault();
-  setFormToDefault();
-});
+  form.reset();
+  resetMap();
+  onMarkerMove();
+  resetMarker();
+  resetPhotoPreview();
+})
 
 form.addEventListener('submit', onFormSubmit);
