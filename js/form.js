@@ -106,6 +106,7 @@ resetButton.addEventListener('click', (evt) => {
   evt.preventDefault();
   form.reset();
   resetMap();
+  filterForm.reset();
   onMarkerMove();
   resetMarker();
   resetPhotoPreview();
