@@ -131,6 +131,9 @@ const createMarker = (advert) => {
 };
 
 const renderMarkers = (data) => {
+  if (!data) {
+    data = adverts.slice()
+  }
   data.forEach((elem) => {
     createMarker(elem);
   })
@@ -148,7 +151,7 @@ const onMapFiltersChange = () => {
   renderMarkers(filterData(adverts));
 }
 
-const successRender = (data) => {
+const renderSuccess = (data) => {
   adverts = data.slice();
 
   renderMarkers(adverts.slice(0, MARKERS_MAX));
@@ -158,11 +161,11 @@ const successRender = (data) => {
 
 const errorHandler = () => {
   const container = document.createElement('div');
-  container.style.zIndex = 800;
+  container.style.zIndex = '800';
   container.style.position = 'absolute';
-  container.style.left = 0;
-  container.style.right = 0;
-  container.style.top = 0;
+  container.style.left = '0';
+  container.style.right = '0';
+  container.style.top = '0';
   container.style.padding = '10px 10px';
   container.style.fontSize = '28px'
   container.style.textAlign = 'center';
@@ -178,14 +181,13 @@ const errorHandler = () => {
   }, DELAY);
 }
 
-request(successRender, errorHandler, 'GET');
+request(renderSuccess, errorHandler, 'GET');
 
 
 export {
   renderMarkers,
   removeMapPin,
   onMarkerMove,
-  errorHandler,
   setDisactiveState,
   resetMap,
   clearMarkers,

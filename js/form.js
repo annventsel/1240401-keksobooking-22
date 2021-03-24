@@ -1,7 +1,7 @@
-import {onMarkerMove, resetMap, resetMarker} from './map.js'
-import {openSuccessMessage, openErrorMessage} from './messages.js'
-import {request} from './request.js';
-import {resetPhotoPreview} from './photo.js';
+import { onMarkerMove, resetMap, resetMarker, removeMapPin, renderMarkers } from './map.js'
+import { openSuccessMessage, openErrorMessage } from './messages.js'
+import { request } from './request.js';
+import { resetPhotoPreview } from './photo.js';
 
 const form = document.querySelector('.ad-form');
 const filterForm = document.querySelector('.map__filters');
@@ -30,7 +30,7 @@ const guestsNumber = {
 const validateRooms = () => {
   let roomValue = roomNumberSelect.value;
 
-  guestsCapacityOption .forEach((option) => {
+  guestsCapacityOption.forEach((option) => {
     let isDisabled = !(guestsNumber[roomValue].indexOf(option.value) >= 0);
     option.selected = guestsNumber[roomValue][0] === option.value;
     option.disabled = isDisabled;
@@ -73,24 +73,21 @@ const onTypeChange = () => {
 
 typeOption.addEventListener('change', onTypeChange);
 
-// const setFormToDefault = (evt) => {
-//   evt.preventDefault();
-//   form.reset();
-//   mapFilter.reset();
-//   resetMap();
-//   onMarkerMove();
-//   resetMarker();
-//   resetPhotoPreview();
-//   removeMapPin();
-//   renderMarkers();
-// }
+const setDefaultState = () => {
+  form.reset();
+  filterForm.reset();
+  resetMap();
+  onMarkerMove();
+  resetMarker();
+  resetPhotoPreview();
+  removeMapPin()
+  renderMarkers()
+  onTypeChange()
+}
 
 const sendForm = () => {
   openSuccessMessage(),
-  form.reset();
-  filterForm.reset();
-  onMarkerMove();
-  resetMarker();
+  setDefaultState()
 };
 
 const showFormError = () => openErrorMessage();
@@ -104,12 +101,7 @@ const resetButton = form.querySelector('.ad-form__reset');
 
 resetButton.addEventListener('click', (evt) => {
   evt.preventDefault();
-  form.reset();
-  resetMap();
-  filterForm.reset();
-  onMarkerMove();
-  resetMarker();
-  resetPhotoPreview();
+  setDefaultState()
 })
 
 form.addEventListener('submit', onFormSubmit);
