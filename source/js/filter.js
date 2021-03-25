@@ -82,12 +82,11 @@ const onFiltersChange = (data) => {
   }, RENDER_DELAY);
 };
 
-const setFilter = (data) => {
-  filterForm.addEventListener('change', onFiltersChange(data));
-};
+
+filterForm.addEventListener('change', onFiltersChange);
+
 
 export {
   filterData,
-  MARKERS_MAX,
-  setFilter
+  MARKERS_MAX
 }

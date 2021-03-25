@@ -139,11 +139,6 @@ const renderMarkers = (data) => {
   })
 };
 
-const clearMarkers = () => {
-  map.removeLayer(layerGroup);
-  map.closePopup();
-}
-
 let adverts = [];
 
 const onMapFiltersChange = () => {
@@ -190,6 +185,5 @@ export {
   onMarkerMove,
   setDisactiveState,
   resetMap,
-  clearMarkers,
   resetMarker
 }

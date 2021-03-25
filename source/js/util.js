@@ -9,12 +9,15 @@ const isEscapeKeydown = (evt) => {
   return evt.key === ESCAPE || evt.key === ESC;
 };
 
-const debounce = (fn, wait) => {
-  let timeout;
-  return function () {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => fn.apply(this, arguments), wait);
-  }
+const debounce = (callback, time) => {
+  let interval;
+  return (...args) => {
+    clearTimeout(interval);
+    interval = setTimeout(() => {
+      interval = null;
+      callback(...args);
+    }, time);
+  };
 };
 
 const createImg = (width = '50', height = '50', alt = '') => {

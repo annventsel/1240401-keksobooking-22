@@ -60,7 +60,7 @@ const createCard = (advert) => {
   cardItem.querySelector('.popup__avatar').src = avatar;
   cardItem.querySelector('.popup__title').textContent = title;
   cardItem.querySelector('.popup__text--address').textContent = address;
-  cardItem.querySelector('.popup__text--price').innerHTML = `${price} <span>₽/ночь</span`;
+  cardItem.querySelector('.popup__text--price').textContent = `${price} <span>₽/ночь</span`;
   cardItem.querySelector('.popup__type').textContent = convertType[type];
   cardItem.querySelector('.popup__text--capacity').textContent = `${rooms} ${declination(rooms, wordsDecl.room)} для ${guests} ${declination(guests, wordsDecl.guest)}`;
   cardItem.querySelector('.popup__text--time').textContent = `Заезд после ${checkin}, выезд до ${checkout}`;

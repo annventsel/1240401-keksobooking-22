@@ -28,10 +28,10 @@ const guestsNumber = {
 }
 
 const validateRooms = () => {
-  let roomValue = roomNumberSelect.value;
+  const roomValue = roomNumberSelect.value;
 
   guestsCapacityOption.forEach((option) => {
-    let isDisabled = !(guestsNumber[roomValue].indexOf(option.value) >= 0);
+    const isDisabled = !(guestsNumber[roomValue].indexOf(option.value) >= 0);
     option.selected = guestsNumber[roomValue][0] === option.value;
     option.disabled = isDisabled;
     option.hidden = isDisabled;
@@ -80,28 +80,28 @@ const setDefaultState = () => {
   onMarkerMove();
   resetMarker();
   resetPhotoPreview();
-  removeMapPin()
-  renderMarkers()
-  onTypeChange()
-}
+  removeMapPin();
+  renderMarkers();
+  onTypeChange();
+};
 
 const sendForm = () => {
-  openSuccessMessage(),
-  setDefaultState()
+  openSuccessMessage();
+  setDefaultState();
 };
 
 const showFormError = () => openErrorMessage();
 
 const onFormSubmit = (evt) => {
   evt.preventDefault();
-  request(sendForm, showFormError, 'POST', new FormData(form))
+  request(sendForm, showFormError, 'POST', new FormData(form));
 };
 
 const resetButton = form.querySelector('.ad-form__reset');
 
 resetButton.addEventListener('click', (evt) => {
   evt.preventDefault();
-  setDefaultState()
-})
+  setDefaultState();
+});
 
 form.addEventListener('submit', onFormSubmit);
