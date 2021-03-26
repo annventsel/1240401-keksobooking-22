@@ -29,9 +29,8 @@ const onPreviewPictureChange = (load, preview) => {
 }
 
 const resetPhotoPreview = () => {
-  const avatarImg = avatarPic.querySelector('img');
-  avatarImg.src = AVATAR_SRC;
-  advertPic.innerHTML = '';
+  avatarPic.querySelector('img').src = AVATAR_SRC;
+  advertPic.querySelector('img').src = AVATAR_SRC;
 }
 
 avatarPreview.addEventListener('change', () => onPreviewPictureChange(avatarPreview, avatarPic));

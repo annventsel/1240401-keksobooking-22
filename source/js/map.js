@@ -1,5 +1,4 @@
-/* global L:readonly */
-
+import L from 'leaflet';
 import {createCard} from './card.js';
 import {request} from './request.js';
 import {filterData, MARKERS_MAX} from './filter.js';
